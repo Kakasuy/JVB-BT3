@@ -1,5 +1,6 @@
 let xPos = 0;
 let dogImages = [];
+let isLoading = false;
 
 // Function to fetch random dog images
 async function fetchDogImages(count = 10) {
@@ -22,6 +23,24 @@ async function fetchDogImages(count = 10) {
         // Fallback to placeholder images if API fails
         return Array.from({length: count}, (_, i) => `https://picsum.photos/id/${i+32}/600/400/`);
     }
+}
+
+// Show loading screen
+function showLoading() {
+    const loading = document.getElementById('loading');
+    const btn = document.getElementById('newDogsBtn');
+    loading.classList.remove('hidden');
+    btn.disabled = true;
+    isLoading = true;
+}
+
+// Hide loading screen
+function hideLoading() {
+    const loading = document.getElementById('loading');
+    const btn = document.getElementById('newDogsBtn');
+    loading.classList.add('hidden');
+    btn.disabled = false;
+    isLoading = false;
 }
 
 // Initialize the slider
@@ -49,55 +68,104 @@ async function initSlider() {
                 ease:'expo'
             })
             .add(()=>{
-                $('.img').on('mouseenter', (e)=>{
-                    let current = e.currentTarget;
-                    gsap.to('.img', {opacity:(i,t)=>(t==current)? 1:0.5, ease:'power3'})
-                })
-                $('.img').on('mouseleave', (e)=>{
-                    gsap.to('.img', {opacity:1, ease:'power2.inOut'})
-                })
+                document.querySelectorAll('.img').forEach(img => {
+                    img.addEventListener('mouseenter', (e) => {
+                        let current = e.currentTarget;
+                        gsap.to('.img', {opacity:(i,t)=>(t==current)? 1:0.5, ease:'power3'})
+                    });
+                    img.addEventListener('mouseleave', (e) => {
+                        gsap.to('.img', {opacity:1, ease:'power2.inOut'})
+                    });
+                });
             }, '-=0.5')
 
         // Hide loading indicator
-        $('#loading').addClass('hidden');
+        hideLoading();
         
     } catch (error) {
         console.error('Error initializing slider:', error);
-        $('#loading').text('Error loading images. Please refresh.');
+        document.getElementById('loading').querySelector('.loading-text').textContent = 'Error loading images. Please refresh.';
     }
 }
 
-$(window).on('mousedown touchstart', dragStart);
-$(window).on('mouseup touchend', dragEnd);
+// Load new dogs function
+async function loadNewDogs() {
+    if (isLoading) return;
+    
+    showLoading();
+    
+    try {
+        // Add a small delay to show loading animation
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Fetch new dog images
+        dogImages = await fetchDogImages(10);
+        
+        // Update images with smooth transition
+        gsap.to('.img', {
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+                gsap.set('.img', {
+                    backgroundImage:(i)=> `url(${dogImages[i]})`,
+                    backgroundPosition:(i)=>getBgPos(i),
+                });
+                gsap.to('.img', {
+                    opacity: 1,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power2.inOut'
+                });
+            }
+        });
+        
+        hideLoading();
+        
+    } catch (error) {
+        console.error('Error loading new dogs:', error);
+        hideLoading();
+    }
+}
 
+// Mouse and touch event handlers
 function dragStart(e){ 
+    if (isLoading) return;
     if (e.touches) e.clientX = e.touches[0].clientX;
     xPos = Math.round(e.clientX);
     gsap.set('.ring', {cursor:'grabbing'})
-    $(window).on('mousemove touchmove', drag);
+    window.addEventListener('mousemove', drag);
+    window.addEventListener('touchmove', drag);
 }
 
 function drag(e){
-  if (e.touches) e.clientX = e.touches[0].clientX;    
+    if (isLoading) return;
+    if (e.touches) e.clientX = e.touches[0].clientX;    
 
-  gsap.to('.ring', {
+    gsap.to('.ring', {
     rotationY: '-=' +( (Math.round(e.clientX)-xPos)%360 ),
     onUpdate:()=>{ gsap.set('.img', { backgroundPosition:(i)=>getBgPos(i) }) }
-  });
-  
-  xPos = Math.round(e.clientX);
+    });
+    
+    xPos = Math.round(e.clientX);
 }
 
 function dragEnd(e){
-  $(window).off('mousemove touchmove', drag);
-  gsap.set('.ring', {cursor:'grab'});
+    window.removeEventListener('mousemove', drag);
+    window.removeEventListener('touchmove', drag);
+    gsap.set('.ring', {cursor:'grab'});
 }
 
 function getBgPos(i){
-  return ( 88-gsap.utils.wrap(0,360,gsap.getProperty('.ring', 'rotationY')-180-i*36)/360*100 )+'% 50%';
+return ( 88-gsap.utils.wrap(0,360,gsap.getProperty('.ring', 'rotationY')-180-i*36)/360*100 )+'% 50%';
 }
 
+// Event listeners
+window.addEventListener('mousedown', dragStart);
+window.addEventListener('touchstart', dragStart);
+window.addEventListener('mouseup', dragEnd);
+window.addEventListener('touchend', dragEnd);
+
 // Initialize when page loads
-$(document).ready(() => {
+document.addEventListener('DOMContentLoaded', () => {
     initSlider();
 });
