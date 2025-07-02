@@ -144,8 +144,6 @@ button {
 .slide:not([data-current]) {
   --slide-scale: 1;
   --slide-tz: 0;
-  /* --slide-tx: calc(var(--offset) * var(--slide-width) * 1.05); */
-  /* --slide-rotY: calc(var(--dir) * -45deg); */
 
   pointer-events: none;
 }
@@ -364,4 +362,26 @@ button {
       transform: scale(1.1);
     }
   }
+}
+
+.refresh-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-family: var(--font-clash-display);
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
 }

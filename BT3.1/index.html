@@ -7,6 +7,8 @@
       <link rel="stylesheet" href="style.css" />
    </head>
    <body>
+      <button class="refresh-btn" onclick="loadNewDogs()">🐕 New Dogs</button>
+
       <div class="slider">
          <button class="slider--btn slider--btn__prev">
             <svg
@@ -24,95 +26,11 @@
          </button>
 
          <div class="slides__wrapper">
-            <div class="slides">
-               <!-- slide 1 -->
-               <div class="slide" data-current>
-                  <div class="slide__inner">
-                     <div class="slide--image__wrapper">
-                        <img class="slide--image" src="https://devloop01.github.io/voyage-slider/images/scotland-mountains.jpg" alt="Image 1" />
-                     </div>
-                  </div>
-               </div>
-               <div
-                  class="slide__bg"
-                  style="--bg: url(https://devloop01.github.io/voyage-slider/images/scotland-mountains.jpg); --dir: 0"
-                  data-current></div>
-
-               <!-- slide 2 -->
-               <div class="slide" data-next>
-                  <div class="slide__inner">
-                     <div class="slide--image__wrapper">
-                        <img
-                           class="slide--image"
-                           src="
-      https://devloop01.github.io/voyage-slider/images/machu-pichu.jpg"
-                           alt="Image 2" />
-                     </div>
-                  </div>
-               </div>
-               <div class="slide__bg" style="--bg: url(https://devloop01.github.io/voyage-slider/images/machu-pichu.jpg); --dir: 1" data-next></div>
-
-               <!-- slide 3 -->
-               <div class="slide" data-previous>
-                  <div class="slide__inner">
-                     <div class="slide--image__wrapper">
-                        <img class="slide--image" src="https://devloop01.github.io/voyage-slider/images/chamonix.jpg" alt="Image 3" />
-                     </div>
-                  </div>
-               </div>
-               <div class="slide__bg" style="--bg: url(https://devloop01.github.io/voyage-slider/images/chamonix.jpg); --dir: -1" data-previous></div>
+            <div class="slides" id="slides-container">
+               <!-- Slides will be generated dynamically -->
             </div>
-            <div class="slides--infos">
-               <!-- Slide Info 1 -->
-               <div class="slide-info" data-current>
-                  <div class="slide-info__inner">
-                     <div class="slide-info--text__wrapper">
-                        <div data-title class="slide-info--text">
-                           <span>Highlands</span>
-                        </div>
-                        <div data-subtitle class="slide-info--text">
-                           <span>Scotland</span>
-                        </div>
-                        <div data-description class="slide-info--text">
-                           <span>The mountains are calling</span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               <!-- Slide Info 2 -->
-               <div class="slide-info" data-next>
-                  <div class="slide-info__inner">
-                     <div class="slide-info--text__wrapper">
-                        <div data-title class="slide-info--text">
-                           <span>Machu Pichu</span>
-                        </div>
-                        <div data-subtitle class="slide-info--text">
-                           <span>Peru</span>
-                        </div>
-                        <div data-description class="slide-info--text">
-                           <span>Adventure is never far away</span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               <!-- Slide Info 3 -->
-               <div class="slide-info" data-previous>
-                  <div class="slide-info__inner">
-                     <div class="slide-info--text__wrapper">
-                        <div data-title class="slide-info--text">
-                           <span>Chamonix</span>
-                        </div>
-                        <div data-subtitle class="slide-info--text">
-                           <span>France</span>
-                        </div>
-                        <div data-description class="slide-info--text">
-                           <span>Let your dreams come true</span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+            <div class="slides--infos" id="slides-info-container">
+               <!-- Slide infos will be generated dynamically -->
             </div>
          </div>
 
@@ -133,7 +51,7 @@
       </div>
 
       <div class="loader">
-         <span class="loader__text">0%</span>
+         <span class="loader__text">Loading Dogs...</span>
       </div>
 
       <div class="support">
