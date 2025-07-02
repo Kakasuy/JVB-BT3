@@ -2,11 +2,6 @@
 // ------------------ Utilities --------------------
 // -------------------------------------------------
 
-// Math utilities
-// -------------------------------------------------
-// ------------------ Utilities --------------------
-// -------------------------------------------------
-
 const wrap = (n, max) => (n + max) % max;
 const lerp = (a, b, t) => a + (b - a) * t;
 
@@ -262,25 +257,11 @@ dogImages.forEach((imageUrl, index) => {
 
 function init() {
 const loader = document.querySelector(".loader");
-const slides = [...document.querySelectorAll(".slide")];
-const slidesInfo = [...document.querySelectorAll(".slide-info")];
-
-const buttons = {
-    prev: document.querySelector(".slider--btn__prev"),
-    next: document.querySelector(".slider--btn__next")
-};
 
 loader.style.opacity = 0;
 loader.style.pointerEvents = "none";
 
-slides.forEach((slide, i) => {
-    const slideInner = slide.querySelector(".slide__inner");
-    const slideInfoInner = slidesInfo[i].querySelector(".slide-info__inner");
-    tilt(slide, { target: [slideInner, slideInfoInner] });
-});
-
-buttons.prev.addEventListener("click", change(-1));
-buttons.next.addEventListener("click", change(1));
+initializeSlider();
 }
 
 function change(direction) {
@@ -369,7 +350,7 @@ try {
 }
 }
 
-async function loadNewDogs() {
+window.loadNewDogs = async function() {
 const loaderText = document.querySelector(".loader__text");
 const loader = document.querySelector(".loader");
 
@@ -378,9 +359,11 @@ loader.style.pointerEvents = "auto";
 loaderText.textContent = "Loading New Dogs...";
 
 try {
+    // Load new dog images
     dogImages = await loadDogImages(3);
     renderSlides();
 
+    // Wait for new images to load
     const images = [...document.querySelectorAll("img")];
     let loadedImages = 0;
     const totalImages = images.length;
@@ -394,7 +377,8 @@ try {
         setTimeout(() => {
         loader.style.opacity = 0;
         loader.style.pointerEvents = "none";
-        init();
+        // Re-initialize the slider with new images
+        initializeSlider();
         }, 500);
     }
     };
@@ -411,7 +395,38 @@ try {
 } catch (error) {
     console.error('Error loading new dog images:', error);
     loaderText.textContent = "Error loading dogs";
+    setTimeout(() => {
+    loader.style.opacity = 0;
+    loader.style.pointerEvents = "none";
+    }, 1500);
 }
+}
+
+function initializeSlider() {
+const slides = [...document.querySelectorAll(".slide")];
+const slidesInfo = [...document.querySelectorAll(".slide-info")];
+
+const buttons = {
+    prev: document.querySelector(".slider--btn__prev"),
+    next: document.querySelector(".slider--btn__next")
+};
+
+// Remove existing event listeners
+const newPrevBtn = buttons.prev.cloneNode(true);
+const newNextBtn = buttons.next.cloneNode(true);
+buttons.prev.parentNode.replaceChild(newPrevBtn, buttons.prev);
+buttons.next.parentNode.replaceChild(newNextBtn, buttons.next);
+
+// Add new event listeners
+newPrevBtn.addEventListener("click", change(-1));
+newNextBtn.addEventListener("click", change(1));
+
+// Apply tilt effect to new slides
+slides.forEach((slide, i) => {
+    const slideInner = slide.querySelector(".slide__inner");
+    const slideInfoInner = slidesInfo[i].querySelector(".slide-info__inner");
+    tilt(slide, { target: [slideInner, slideInfoInner] });
+});
 }
 
 // Start the application
