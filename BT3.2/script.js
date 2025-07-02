@@ -94,7 +94,7 @@ function dragEnd(e){
 }
 
 function getBgPos(i){
-  return ( 90-gsap.utils.wrap(0,360,gsap.getProperty('.ring', 'rotationY')-180-i*36)/360*100 )+'% 50%';
+  return ( 88-gsap.utils.wrap(0,360,gsap.getProperty('.ring', 'rotationY')-180-i*36)/360*100 )+'% 50%';
 }
 
 // Initialize when page loads
