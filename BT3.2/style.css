@@ -1,3 +1,16 @@
+@import url("https://api.fontshare.com/v2/css?f[]=archivo@100,200,300,400,500,600,700,800,900&f[]=clash-display@200,300,400,500,600,700&display=swap");
+
+:root {
+  --slide-width: min(25vw, 300px);
+  --slide-aspect: 2 / 3;
+
+  --slide-transition-duration: 800ms;
+  --slide-transition-easing: ease;
+
+  --font-archivo: "Archivo", sans-serif;
+  --font-clash-display: "Clash Display", sans-serif;
+}
+
 html, body, .stage, .ring, .img {
   width:100%;
   height: 100%;
@@ -33,10 +46,10 @@ div, svg {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-family: 'Arial', sans-serif;
-  font-size: 24px;
-  font-weight: bold;
+  color: #fff;
+  font-family: var(--font-clash-display);
+  font-size: clamp(2rem, 2vw, 5rem);
+  font-weight: 800;
   z-index: 1000;
   opacity: 1;
   transition: opacity 0.5s ease;
