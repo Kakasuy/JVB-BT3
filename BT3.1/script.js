@@ -377,7 +377,6 @@ try {
         setTimeout(() => {
         loader.style.opacity = 0;
         loader.style.pointerEvents = "none";
-        // Re-initialize the slider with new images
         initializeSlider();
         }, 500);
     }
@@ -429,5 +428,4 @@ slides.forEach((slide, i) => {
 });
 }
 
-// Start the application
 setup();
