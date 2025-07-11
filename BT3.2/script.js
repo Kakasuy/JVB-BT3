@@ -2,7 +2,7 @@ let xPos = 0;
 let dogImages = [];
 let isLoading = false;
 
-// Function to fetch random dog images
+// Fetch random dog images
 async function fetchDogImages(count = 10) {
     const images = [];
     const promises = [];
@@ -25,7 +25,6 @@ async function fetchDogImages(count = 10) {
     }
 }
 
-// Show loading screen
 function showLoading() {
     const loading = document.getElementById('loading');
     const btn = document.getElementById('newDogsBtn');
@@ -34,7 +33,7 @@ function showLoading() {
     isLoading = true;
 }
 
-// Hide loading screen
+
 function hideLoading() {
     const loading = document.getElementById('loading');
     const btn = document.getElementById('newDogsBtn');
@@ -43,7 +42,7 @@ function hideLoading() {
     isLoading = false;
 }
 
-// Initialize the slider
+
 async function initSlider() {
     try {
         dogImages = await fetchDogImages(10);
@@ -79,7 +78,6 @@ async function initSlider() {
                 });
             }, '-=0.5')
 
-        // Hide loading indicator
         hideLoading();
         
     } catch (error) {
@@ -88,7 +86,6 @@ async function initSlider() {
     }
 }
 
-// Load new dogs function
 async function loadNewDogs() {
     if (isLoading) return;
     
@@ -98,7 +95,6 @@ async function loadNewDogs() {
         // Add a small delay to show loading animation
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        // Fetch new dog images
         dogImages = await fetchDogImages(10);
         
         // Update images with smooth transition
@@ -165,7 +161,6 @@ window.addEventListener('touchstart', dragStart);
 window.addEventListener('mouseup', dragEnd);
 window.addEventListener('touchend', dragEnd);
 
-// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
     initSlider();
 });
